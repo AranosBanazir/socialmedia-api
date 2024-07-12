@@ -1,9 +1,11 @@
 const router = require('express').Router()
-
+const {User} = require('../../models')
     //path from /api/users
 
     router.get('/', async (req, res)=>{
         //get all users
+        const users = await User.find()
+        res.json(users).status(200)
     })
 
     router.get('/:id', async (req, res)=>{
