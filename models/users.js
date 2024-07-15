@@ -35,7 +35,7 @@ const userSchema = new Schema({
 },
 {
     toJSON:{
-        getters: true
+        getters: true,
     }
 })
 
@@ -43,6 +43,12 @@ const userSchema = new Schema({
 function formatDate(date){
     return date.toLocaleDateString()
 }
+
+userSchema.virtual('friendCount').get(function(){
+    return this.friends.length
+})
+
+
 
 const User = model('User', userSchema)
 

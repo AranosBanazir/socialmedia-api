@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User} = require('../../models')
+const {User, Thought} = require('../../models')
     //path from /api/users
 
     router.get('/', async (req, res)=>{
@@ -34,6 +34,33 @@ const {User} = require('../../models')
             res.json(error).status(500)
         }
     })
+
+    router.put('/:id', async (req, res)=>{
+        try {
+            const { id } = req.params
+            const user = await User.findByIdAndUpdate(id, req.body, {new: true})
+            res.json(user).status(200)
+        } catch (error) {
+            res.json(error).status(500)
+        }
+    })
+
+    router.delete('/:id', async (req, res)=>{
+        try {
+            const { id } = req.params
+            const user = await User.findByIdAndDelete(id)
+            const thoughts = await Thought.deleteMany({username: user.username}) 
+            res.send(`User ${user.username} deleted. ${thoughts.deletedCount} thoughts deleted.`).status(200)
+        } catch (error) {
+            res.json(error).status(500)
+        }
+    })
+
+
+
+
+
+
 
     router.post('/:userId/friends/:friendId', async (req, res)=>{
         const { userId, friendId } = req.params

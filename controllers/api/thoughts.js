@@ -107,10 +107,12 @@ const { Thought, User } = require('../../models')
             const { thoughtId, reactionId } = req.params
             const thought = await Thought.findById(thoughtId)
             
-            await thought.reactions.id(reactionId).deleteOne()
-                
+            //deletes the reaction with the matching id from the array
+            //and then saves the document.
+            thought.reactions.id(reactionId).deleteOne()
+            await thought.save()
+
             res.json(thought).status(200)
-            
         } catch (error) {
             res.json(error).status(500)
             console.log(error)
